@@ -1,14 +1,18 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const subSampleSchema = new Schema(
+const teamSchema = new Schema(
   {
     name: {
       type: String,
       required: true,
     },
-    number: {
+    foundationYear: {
       type: Number,
+      required: true,
+    },
+    city: {
+      type: String,
       required: true,
     },
   },

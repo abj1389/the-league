@@ -21,5 +21,5 @@ const teamSchema = new Schema(
   }
 );
 
-const SubSample = mongoose.model("SubSample", subSampleSchema, "testsubsample");
-module.exports = { SubSample };
+const Team = mongoose.model("Team", TeamSchema, "testTeam");
+module.exports = { Team };

@@ -1,7 +1,8 @@
 const express = require("express");
 
 // Modelos
-const { Sample } = require("../models/Sample.js");
+const { Team } = require("../models/Team.js");
+//const { Sample } = require("../models/Sample.js");
 
 const router = express.Router();
 
@@ -9,21 +10,20 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     // Asi leemos query params
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
-    const samples = await Sample.find()
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+    const teams = await Team.find()
       .limit(limit)
-      .skip((page - 1) * limit)
-      .populate("child");
+      .skip((page - 1) * limit);
 
     // Num total de elementos
-    const totalElements = await Sample.countDocuments();
+    const totalElements = await Team.countDocuments();
 
     const response = {
       totalItems: totalElements,
       totalPages: Math.ceil(totalElements / limit),
       currentPage: page,
-      data: samples,
+      data: teams,
     };
 
     res.json(response);
@@ -37,9 +37,20 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const sample = await Sample.findById(id).populate("child");
-    if (sample) {
-      res.json(sample);
+    let team = await Team.findById(id);
+
+    if (team) {
+      const includeParents = req.query.includeParents === "true";
+
+      if (includeParents) {
+        const parents = await Sample.find({ child: id });
+        if (parents) {
+          team = team.toObject();
+          team.parents = parents;
+        }
+      }
+
+      res.json(team);
     } else {
       res.status(404).json({});
     }
@@ -49,13 +60,13 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/title/:title", async (req, res) => {
-  const title = req.params.title;
+router.get("/name/:name", async (req, res) => {
+  const name = req.params.name;
 
   try {
-    const sample = await Sample.find({ title: new RegExp("^" + title.toLowerCase(), "i") }).populate("child");
-    if (sample?.length) {
-      res.json(sample);
+    const player = await Player.find({ name: new RegExp("^" + name.toLowerCase(), "i") }); //.populate("child");
+    if (player?.length) {
+      res.json(player);
     } else {
       res.status(404).json([]);
     }
@@ -70,13 +81,9 @@ router.post("/", async (req, res) => {
   console.log(req.headers);
 
   try {
-    const sample = new Sample({
-      title: req.body.title,
-      subtitle: req.body.subtitle,
-    });
-
-    const createdSample = await sample.save();
-    return res.status(201).json(createdSample);
+    const team = new Team(req.body);
+    const createdTeam = await team.save();
+    return res.status(201).json(createdTeam);
   } catch (error) {
     console.error(error);
     res.status(500).json(error);
@@ -87,9 +94,9 @@ router.post("/", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const sampleDeleted = await Sample.findByIdAndDelete(id);
-    if (sampleDeleted) {
-      res.json(sampleDeleted);
+    const teamDeleted = await Team.findByIdAndDelete(id);
+    if (teamDeleted) {
+      res.json(teamDeleted);
     } else {
       res.status(404).json({});
     }
@@ -103,9 +110,9 @@ router.delete("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const sampleUpdated = await Sample.findByIdAndUpdate(id, req.body, { new: true });
-    if (sampleUpdated) {
-      res.json(sampleUpdated);
+    const teamUpdated = await Team.findByIdAndUpdate(id, req.body, { new: true });
+    if (teamUpdated) {
+      res.json(teamUpdated);
     } else {
       res.status(404).json({});
     }
@@ -115,4 +122,4 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-module.exports = { sampleRouter: router };
+module.exports = { teamRouter: router };

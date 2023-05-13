@@ -49,11 +49,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/name/:name", async (req, res) => {
-  const name = req.params.name;
+router.get("/firstName/:firstName", async (req, res) => {
+  const firstName = req.params.firstName;
 
   try {
-    const player = await Player.find({ name: new RegExp("^" + name.toLowerCase(), "i") }).populate("team");
+    const player = await Player.find({ firstName: new RegExp("^" + firstName.toLowerCase(), "i") }).populate("team");
     if (player?.length) {
       res.json(player);
     } else {

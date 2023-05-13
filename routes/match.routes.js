@@ -49,22 +49,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/name/:name", async (req, res) => {
-  const name = req.params.name;
-
-  try {
-    const match = await Match.find({ name: new RegExp("^" + name.toLowerCase(), "i") }).populate(["localTeam", "visitingTeam"]);
-    if (match?.length) {
-      res.json(match);
-    } else {
-      res.status(404).json([]);
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json(error);
-  }
-});
-
 // CRUD: CREATE
 router.post("/", async (req, res) => {
   console.log(req.headers);

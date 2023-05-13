@@ -15,11 +15,11 @@ const matchSchema = new Schema(
     },
     goalsOfLocal: {
       type: Number,
-      required: true,
+      required: false,
     },
     goalsOfVisiting: {
       type: Number,
-      required: true,
+      required: false,
     },
     matchPlayed: {
       type: Boolean,

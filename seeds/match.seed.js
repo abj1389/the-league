@@ -26,8 +26,8 @@ const matchSeed = async () => {
           await new Match({
             localTeam: teamList[i],
             visitingTeam: teamList[j],
-            goalsOfLocal: generateRandom(0, 10),
-            goalsOfVisiting: generateRandom(0, 10),
+            goalsOfLocal: date < today ? generateRandom(0, 10) : null,
+            goalsOfVisiting: date < today ? generateRandom(0, 10) : null,
             date: date.setDate(date.getDate() + 4),
             matchPlayed: date > today ? false : true,
           }).save();
@@ -35,8 +35,8 @@ const matchSeed = async () => {
           await new Match({
             localTeam: teamList[j],
             visitingTeam: teamList[i],
-            goalsOfLocal: generateRandom(0, 10),
-            goalsOfVisiting: generateRandom(0, 10),
+            goalsOfLocal: date < today ? generateRandom(0, 10) : null,
+            goalsOfVisiting: date < today ? generateRandom(0, 10) : null,
             date: date.setDate(date.getDate() + 4),
             matchPlayed: date > today ? false : true,
           }).save();

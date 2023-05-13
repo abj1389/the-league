@@ -1,6 +1,7 @@
 const express = require("express");
 const { playerRouter } = require("./routes/player.routes.js");
 const { teamRouter } = require("./routes/team.routes.js");
+const { matchRouter } = require("./routes/match.routes.js");
 
 // Conexión a la BBDD
 const { connect } = require("./db.js");

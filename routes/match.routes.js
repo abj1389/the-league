@@ -1,7 +1,7 @@
 const express = require("express");
 
 // Modelos
-const { Player } = require("../models/Player.js");
+const { Match } = require("../models/Match.js");
 
 const router = express.Router();
 
@@ -11,19 +11,19 @@ router.get("/", async (req, res) => {
     // Asi leemos query params
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-    const players = await Player.find()
+    const matches = await Match.find()
       .limit(limit)
       .skip((page - 1) * limit)
-      .populate("team");
+      .populate(["localTeam", "visitingTeam"]);
 
     // Num total de elementos
-    const totalElements = await Player.countDocuments();
+    const totalElements = await Match.countDocuments();
 
     const response = {
       totalItems: totalElements,
       totalPages: Math.ceil(totalElements / limit),
       currentPage: page,
-      data: players,
+      data: matches,
     };
 
     res.json(response);
@@ -37,9 +37,9 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const player = await Player.findById(id).populate("team");
-    if (player) {
-      res.json(player);
+    const match = await Match.findById(id).populate(["localTeam", "visitingTeam"]);
+    if (match) {
+      res.json(match);
     } else {
       res.status(404).json({});
     }
@@ -53,9 +53,9 @@ router.get("/name/:name", async (req, res) => {
   const name = req.params.name;
 
   try {
-    const player = await Player.find({ name: new RegExp("^" + name.toLowerCase(), "i") }).populate("team");
-    if (player?.length) {
-      res.json(player);
+    const match = await Match.find({ name: new RegExp("^" + name.toLowerCase(), "i") }).populate(["localTeam", "visitingTeam"]);
+    if (match?.length) {
+      res.json(match);
     } else {
       res.status(404).json([]);
     }
@@ -70,10 +70,10 @@ router.post("/", async (req, res) => {
   console.log(req.headers);
 
   try {
-    const player = new Player(req.body);
+    const match = new Match(req.body);
 
-    const createdPlayer = await player.save();
-    return res.status(201).json(createdPlayer);
+    const createdMatch = await match.save();
+    return res.status(201).json(createdMatch);
   } catch (error) {
     console.error(error);
     res.status(500).json(error);
@@ -84,9 +84,9 @@ router.post("/", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const playerDeleted = await Player.findByIdAndDelete(id);
-    if (playerDeleted) {
-      res.json(playerDeleted);
+    const matchDeleted = await Match.findByIdAndDelete(id);
+    if (matchDeleted) {
+      res.json(matchDeleted);
     } else {
       res.status(404).json({});
     }
@@ -100,9 +100,9 @@ router.delete("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const playerUpdated = await Player.findByIdAndUpdate(id, req.body, { new: true });
-    if (playerUpdated) {
-      res.json(playerUpdated);
+    const matchUpdated = await Match.findByIdAndUpdate(id, req.body, { new: true });
+    if (matchUpdated) {
+      res.json(matchUpdated);
     } else {
       res.status(404).json({});
     }
@@ -112,4 +112,4 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-module.exports = { playerRouter: router };
+module.exports = { matchRouter: router };

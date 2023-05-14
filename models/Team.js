@@ -1,14 +1,18 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const subSampleSchema = new Schema(
+const teamSchema = new Schema(
   {
     name: {
       type: String,
       required: true,
     },
-    number: {
+    foundationYear: {
       type: Number,
+      required: true,
+    },
+    city: {
+      type: String,
       required: true,
     },
   },
@@ -17,5 +21,5 @@ const subSampleSchema = new Schema(
   }
 );
 
-const SubSample = mongoose.model("SubSample", subSampleSchema, "testsubsample");
-module.exports = { SubSample };
+const Team = mongoose.model("Team", teamSchema);
+module.exports = { Team };

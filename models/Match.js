@@ -16,10 +16,14 @@ const matchSchema = new Schema(
     goalsOfLocal: {
       type: Number,
       required: false,
+      min: [0, "Pensamos que marcar menos de 0 goles es complicado y más de 15 es pasarse..."],
+      max: [15, "Pensamos que marcar menos de 0 goles es complicado y más de 15 es pasarse..."],
     },
     goalsOfVisiting: {
       type: Number,
       required: false,
+      min: [0, "Pensamos que marcar menos de 0 goles es complicado y más de 15 es pasarse..."],
+      max: [15, "Pensamos que marcar menos de 0 goles es complicado y más de 15 es pasarse..."],
     },
     matchPlayed: {
       type: Boolean,

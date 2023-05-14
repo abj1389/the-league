@@ -24,7 +24,7 @@ const playerSchema = new Schema(
       required: true,
       trim: true,
       uppercase: true,
-      enum: [positions, "La posición solo puede ser PORTERO, CIERRE, ALA O PIVOT."],
+      enum: positions,
     },
     number: {
       type: Number,

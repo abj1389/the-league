@@ -7,22 +7,22 @@ let teamList = [
   {
     name: "Porcinos FC",
     foundationYear: 2015,
-    city: "Barcelona",
+    city: "BARCELONA",
   },
   {
     name: "Saiyans FC",
     foundationYear: 2017,
-    city: "Madrid",
+    city: "MADRID",
   },
   {
     name: "Trueno FC",
     foundationYear: 2020,
-    city: "Valencia",
+    city: "VALENCIA",
   },
   {
     name: "Frikis FC",
     foundationYear: 2017,
-    city: "Galicia",
+    city: "LA CORUÑA",
   },
 ];
 

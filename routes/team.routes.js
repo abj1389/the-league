@@ -76,6 +76,34 @@ router.get("/name/:name", async (req, res) => {
   }
 });
 
+router.get("/classification", async (req, res) => {
+  try {
+    // Asi leemos query params
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+    const teams = await Team.find()
+      .limit(limit)
+      .skip((page - 1) * limit);
+
+    //Calculamos clasificación
+
+    // Num total de elementos
+    const totalElements = await Team.countDocuments();
+
+    const response = {
+      totalItems: totalElements,
+      totalPages: Math.ceil(totalElements / limit),
+      currentPage: page,
+      data: teams,
+    };
+    console.log(response.data.toObject);
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+});
+
 // CRUD: CREATE
 router.post("/", async (req, res) => {
   console.log(req.headers);
